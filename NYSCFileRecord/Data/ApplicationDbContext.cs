@@ -16,5 +16,6 @@ namespace NYSCFileRecord.Data
         }
 
         public DbSet<FileRecord> FileRecord { get; set; }
+        public DbSet<CDSRecord> CDSRecord { get; set; }
     }
 }

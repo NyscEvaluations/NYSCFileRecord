@@ -1,4 +1,5 @@
-﻿using NYSCFileRecord.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NYSCFileRecord.Data;
 using NYSCFileRecord.Models;
 using System;
 using System.Collections.Generic;
@@ -9,36 +10,52 @@ namespace NYSCFileRecord.Repositories.Queries
 {
     public class FileQueries
     {
-        private static ApplicationDbContext _db;
-        public FileQueries(ApplicationDbContext db)
-        {
-            _db = db;
-        }
-        
-        public static IQueryable<object> GetAllFiles()
-        {
-            IQueryable<object> result;
 
-             result = (from f in _db.FileRecord
-                          select new
-                          {
-                              Name = f.Name,
-                              //CodeNumber = f.CodeNumber,
-                              //Description = f.Description
-                          });
-            //var result = _db.FileRecord.ToList();
+        public async Task<List<FileRecord>> GetAllFiles(ApplicationDbContext _db)
+        {
+            //IQueryable<object> result;
+
+            var result = await (from f in _db.FileRecord
+                                where f.IsActive.Equals(true)
+                                select new FileRecord
+                                {
+                                    Id = f.Id,
+                                    Name = f.Name,
+                                    CodeNumber = f.CodeNumber,
+                                    Description = f.Description,
+                                    PhoneNumber = f.PhoneNumber
+                                }).ToListAsync();
+
             return result;
         }
+        //    var result = await _db.FileRecord
+        //                  .Select(f =>
+        //                  new FileRecord
+        //                  {
+        //                      Id = f.Id,
+        //                      Name = f.Name,
+        //                      CodeNumber = f.CodeNumber,
+        //                      Description = f.Description,
+        //                      PhoneNumber = f.PhoneNumber
+        //                  }).Where(f => f.IsActive.Equals(true)).ToListAsync();
 
-        public static IQueryable<object> Test()
+            
+        //    return result;
+        //}
+
+        public async Task<FileRecord> GetFilesById(ApplicationDbContext _db, int? fileId)
         {
-            var vehicles = from v in _db.Users
-                           select new
-                           {
-                               Id = v.Id,
-                               
-                           };
-            return vehicles;
-        }
+            var result = await _db.FileRecord
+                        .Select(f =>
+                                  new FileRecord
+                                  {
+                                      Id = f.Id,
+                                      Name = f.Name,
+                                      CodeNumber = f.CodeNumber,
+                                      Description = f.Description,
+                                      PhoneNumber = f.PhoneNumber
+                                  }).Where(f => f.Id == fileId).FirstOrDefaultAsync();
+            return result;     
+         }
     }
 }

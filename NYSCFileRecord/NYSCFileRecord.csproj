@@ -18,9 +18,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Domain\" />
   </ItemGroup>
 
 </Project>

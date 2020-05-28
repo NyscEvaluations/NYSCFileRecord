@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NYSCFileRecord.Data;
+using NYSCFileRecord.Domain.Services;
 using NYSCFileRecord.Models;
 using NYSCFileRecord.Repositories.Queries;
 
@@ -14,27 +15,25 @@ namespace NYSCFileRecord.Controllers
     [Area("Corper")]
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _db;
 
-        public readonly ApplicationDbContext _db;
-        FileQueries fileRecord;
-        public HomeController(ApplicationDbContext db, FileQueries fileRecord)
+        private readonly FileService fileService;
+
+        FileQueries filesValue = new FileQueries();
+        public HomeController(ApplicationDbContext db)
         {
             _db = db;
-            
         }
 
-        public IActionResult Index()
+        //FileQueries fileRecord;
+
+        
+        
+        public async Task<IActionResult> Index()
         {
 
-            //var result = (from f in _db.FileRecord
-            //              select new 
-            //              {
-            //                  Name = f.Name,
-            //                  CodeNumber = f.CodeNumber,
-            //                  Description = f.Description
-            //              });
-
-            var result = FileQueries.GetAllFiles();
+            //var result = fileService.GetAllFilesView();
+            var result = await filesValue.GetAllFiles(_db);
             //var fileView = _db.FileRecord.ToList();
             return View(result);
         }
