@@ -1,4 +1,4 @@
-﻿@model NYSCFileRecord.Models.ViewModels.FileViewModel
+﻿@model NYSCFileRecord.Models.ViewModels.ExportDatabaseToExcelViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -37,9 +37,9 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
 
-        <partial name="_Header" model="Model.UserModel" />
+        <partial name="_Header"  model="Model.UserModel"/>
         <!-- Left side column. contains the logo and sidebar -->
-        <partial name="_NavigationalMenu" model="Model.UserModel"/>
+        <partial name="_NavigationalMenu"  model="Model.UserModel"/>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -51,90 +51,16 @@
                     <li class="active"><a href="#">File Record</a></li>
                 </ol>
             </section>
-
             <!-- Main content -->
             <section class="content">
-
-                <div class="col-6 text-right">
-                    <p>
-                        <button class="btn btn-primary" onclick="createModal('/Admin/File/create')"><i class="fa fa-plus"></i>&nbsp; Create New</button>
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-
-
-                        <div class="box">
-                            <div class="box-header">
-                                <h3 class="box-title">Data Table With Full Features</h3>
-                            </div><!-- /.box-header -->
-                            <div class="box-body">
-                                @if (Model.FileRecord.Count() > 0)
-                                {
-                                    <table id="example1" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Code Number</th>
-                                                <th>Taken To</th>
-                                                <th>Returned From</th>
-                                                <th>Date</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.FileRecord)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @Html.DisplayFor(m => item.CodeNumber)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => item.TakenTo)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => item.ReturnedFrom)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(m => item.DateCreated)
-                                                    </td>
-                                                    <td>
-                                                        <div class="btn-group" role="group">
-                                                            <button class="btn btn-info" onclick="editModal('/Admin/File/Edit?Id=@item.Id')">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-
-                                                            <button class="btn btn-success" onclick="detailModal('/Admin/File/Detail?Id=@item.Id')">
-                                                                <i class="fa fa-list-alt"></i>
-                                                            </button>
-
-                                                            <button class="btn btn-danger" onclick="deleteModal('/Admin/File/Delete?Id=@item.Id')">
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Code Number</th>
-                                                <th>Taken To</th>
-                                                <th>Returned From</th>
-                                                <th>Date</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                }
-                                else
-                                {
-                                    <P>No File Record Exist...</P>
-                                }
-
-                            </div><!-- /.box-body -->
-                        </div><!-- /.box -->
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
+                <form asp-area="Admin" asp-controller="ExportDatabaseToExcel" asp-action="Export" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="submit" name="Export" value="Export Database To Excel"
+                                   class="btn btn-primary" asp-action="Export" />
+                        </div>
+                    </div>
+                </form>
             </section><!-- /.content -->
         </div><!-- /.content-wrapper -->
         <partial name="_Footer" />
@@ -436,6 +362,60 @@
 
     </script>
 
+    @*<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>*@
+    <script type="text/javascript">
+        $(function () {
+            $('#btnupload').on('click', function () {
+                var fileExtension = ['xls', 'xlsx'];
+                var filename = $('#fileupload').val();
+                if (filename.length == 0) {
+                    alert("Please select a file.");
+                    return false;
+                }
+                else {
+                    var extension = filename.replace(/^.*\./, '');
+                    if ($.inArray(extension, fileExtension) == -1) {
+                        alert("Please select only excel files.");
+                        return false;
+                    }
+                }
+                var fdata = new FormData();
+                var fileUpload = $("#fileupload").get(0);
+                var files = fileUpload.files;
+                fdata.append(files[0].name, files[0]);
+                alert("working");
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Content("~/")' + "Admin/FileRecordUploadAndExport/Import",
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: fdata,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.length == 0)
+                        alert('Some error occured while uploading');
+                        else {
+                            $('#divPrint').html(response);
+                        }
+                    },
+                    error: function (e) {
+                    $('#divPrint').html(e.responseText);
+                }
+                });
+        })
+        $('#btnExport').on('click', function () {
+            var fileExtension = ['xls', 'xlsx'];
+            var filename = $('#fileupload').val();
+            if (filename.length == 0) {
+                alert("Please select a file then Import");
+                return false;
+            }
+        });
+        });
+    </script>
 
 </body>
 </html>

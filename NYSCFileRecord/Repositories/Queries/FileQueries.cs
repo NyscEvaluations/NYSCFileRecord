@@ -28,6 +28,25 @@ namespace NYSCFileRecord.Repositories.Queries
 
             return result;
         }
+
+        public async Task<List<FileRecord>> GetFilesByDate(ApplicationDbContext _db, DateTime startdate, DateTime enddate)
+        {
+
+            var result = await (from f in _db.FileRecord
+                                where f.IsActive.Equals(true) &&
+                                (f.DateCreated.Date >= startdate.Date && f.DateCreated.Date <= enddate.Date)
+                                select new FileRecord
+                                {
+                                    Id = f.Id,
+                                    Name = f.Name,
+                                    CodeNumber = f.CodeNumber,
+                                    Description = f.Description,
+                                    PhoneNumber = f.PhoneNumber
+                                }).ToListAsync();
+
+            return result;
+        }
+
         //    var result = await _db.FileRecord
         //                  .Select(f =>
         //                  new FileRecord
@@ -39,7 +58,7 @@ namespace NYSCFileRecord.Repositories.Queries
         //                      PhoneNumber = f.PhoneNumber
         //                  }).Where(f => f.IsActive.Equals(true)).ToListAsync();
 
-            
+
         //    return result;
         //}
 

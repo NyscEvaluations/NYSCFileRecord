@@ -1,4 +1,4 @@
-﻿@model NYSCFileRecord.Models.ViewModels.FileViewModel
+﻿@model NYSCFileRecord.Models.ViewModels.UsersViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -39,7 +39,7 @@
 
         <partial name="_Header" model="Model.UserModel" />
         <!-- Left side column. contains the logo and sidebar -->
-        <partial name="_NavigationalMenu" model="Model.UserModel"/>
+        <partial name="_NavigationalMenu" model="Model.UserModel" />
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -48,7 +48,7 @@
                 <h2 class="text-info">File Record</h2>
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active"><a href="#">File Record</a></li>
+                    <li class="active"><a href="#">Users</a></li>
                 </ol>
             </section>
 
@@ -57,7 +57,7 @@
 
                 <div class="col-6 text-right">
                     <p>
-                        <button class="btn btn-primary" onclick="createModal('/Admin/File/create')"><i class="fa fa-plus"></i>&nbsp; Create New</button>
+                        <button class="btn btn-primary" onclick="createModal('/Admin/Administration/CreateUser')"><i class="fa fa-plus"></i>&nbsp; Create New</button>
                     </p>
                 </div>
                 <div class="row">
@@ -69,45 +69,45 @@
                                 <h3 class="box-title">Data Table With Full Features</h3>
                             </div><!-- /.box-header -->
                             <div class="box-body">
-                                @if (Model.FileRecord.Count() > 0)
+                                @if (Model.User.Count() > 0)
                                 {
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Code Number</th>
-                                                <th>Taken To</th>
-                                                <th>Returned From</th>
-                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var item in Model.FileRecord)
+                                            @foreach (var item in Model.User)
                                             {
                                                 <tr>
                                                     <td>
-                                                        @Html.DisplayFor(m => item.CodeNumber)
+                                                        @Html.DisplayFor(m => item.FirstName)  @Html.DisplayFor(m => item.LastName)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(m => item.TakenTo)
+                                                        @Html.DisplayFor(m => item.Username)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(m => item.ReturnedFrom)
+                                                        @Html.DisplayFor(m => item.Email)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(m => item.DateCreated)
+                                                        @Html.DisplayFor(m => item.PhoneNumber)
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
-                                                            <button class="btn btn-info" onclick="editModal('/Admin/File/Edit?Id=@item.Id')">
+                                                            <button class="btn btn-info" onclick="editModal('/Admin/Administration/EditUser?Id=@item.UserId')">
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
 
-                                                            <button class="btn btn-success" onclick="detailModal('/Admin/File/Detail?Id=@item.Id')">
+                                                            <button class="btn btn-success" onclick="detailModal('/Admin/Administration/UserDetail?Id=@item.UserId')">
                                                                 <i class="fa fa-list-alt"></i>
                                                             </button>
 
-                                                            <button class="btn btn-danger" onclick="deleteModal('/Admin/File/Delete?Id=@item.Id')">
+                                                            <button class="btn btn-danger" onclick="deleteModal('/Admin/Administration/DeleteUser?Id=@item.UserId')">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </div>
@@ -117,10 +117,10 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Code Number</th>
-                                                <th>Taken To</th>
-                                                <th>Returned From</th>
-                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>

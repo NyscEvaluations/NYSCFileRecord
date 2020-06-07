@@ -10,6 +10,10 @@ namespace NYSCFileRecord.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        public ApplicationDbContext()
+        {
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -17,5 +21,8 @@ namespace NYSCFileRecord.Data
 
         public DbSet<FileRecord> FileRecord { get; set; }
         public DbSet<CDSRecord> CDSRecord { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<AppRole> AppRole { get; set; }
+        public DbSet<UserAppRole> UserAppRole { get; set; }
     }
 }

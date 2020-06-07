@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NYSCFileRecord.Data;
+using NYSCFileRecord.Domain.Services;
 using NYSCFileRecord.Models;
+using NYSCFileRecord.Models.ViewModels;
 using NYSCFileRecord.Repositories.Queries;
 using NYSCFileRecord.Repositories.Services;
+using NYSCFileRecord.Utility;
 
 namespace NYSCFileRecord.Areas.Admin.Controllers
 {
@@ -16,6 +21,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
         private readonly ApplicationDbContext _db;
 
         FileQueries filesValue = new FileQueries();
+        AccountService accountService = new AccountService();
         FileRecordRepository fileRecordRepository = new FileRecordRepository();
         public FileController(ApplicationDbContext db)
         {
@@ -23,9 +29,13 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var result = await filesValue.GetAllFiles(_db);
-
-            return View(result);
+            var UserId = HttpContext.Session.GetInt32(SD.UserId);
+            FileViewModel fileVM = new FileViewModel()
+            {
+                FileRecord = await filesValue.GetAllFiles(_db),
+                UserModel = await accountService.GetUser(_db, UserId)
+            };
+            return View(fileVM);
         }
 
         [HttpGet]
