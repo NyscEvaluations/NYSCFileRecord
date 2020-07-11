@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NYSCFileRecord.Data;
 using NYSCFileRecord.Domain.Services;
 using NYSCFileRecord.Models;
@@ -13,15 +16,20 @@ using NYSCFileRecord.Utility;
 namespace NYSCFileRecord.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class AccountController : Controller
     {
-        AccountQueries accountQueries = new AccountQueries();
         private readonly ApplicationDbContext _db;
-        AccountService accountService = new AccountService();
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(ApplicationDbContext db)
+        public AccountController(ApplicationDbContext db,
+                                 UserManager<ApplicationUser> userManager,
+                                 SignInManager<ApplicationUser> signInManager)
         {
             _db = db;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         public IActionResult Index()
         {
@@ -29,78 +37,93 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(User user)
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterModel model)
         {
-            user.Username = "1234";
-            user.PhoneNumber = "123";
-            user.StreetAddress = "df";
-            user.PostalCode = "dg";
-            user.State = "jfj";
-            user.City = "kv";
+           
 
-
-            if(user == null)
+            if(model == null)
             {
-                throw new ArgumentNullException(nameof(user));
+                throw new ArgumentNullException(nameof(model));
             }
-            
-            var db = new ApplicationDbContext();
 
-            var result = await accountQueries.GetUserByCodeNumber(_db, user.Username);
-            //if(ModelState.IsValid)
-            //{
-            var result1 = await accountService.RegisterNewUser(_db, user);
-            //}
-            return RedirectToAction(nameof(Register));
+            if (ModelState.IsValid)
+            {
+                var userModel = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    IsActive = true
+                };
+
+                var result = await _userManager.CreateAsync(userModel, model.Password);
+
+                if (result.Succeeded)
+                {
+
+                    await _signInManager.SignInAsync(userModel, isPersistent: false);
+                    return Redirect("/Admin/Administration/Index");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
         }
 
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(User user)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginModel model, string ReturnUrl)
         {
-            var UserId = string.Empty;
-
-            if (user == null)
+            if(ModelState.IsValid)
             {
-                throw new ArgumentNullException(nameof(user));
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                if (result.Succeeded)
+                {
+                    if(!string.IsNullOrEmpty(ReturnUrl))
+                    {
+                        Redirect(ReturnUrl);
+                    }
+                    else
+                    {
+                        var userResult = await _db.Users.Where(u => u.Email == model.Email).FirstOrDefaultAsync();
+                        HttpContext.Session.SetString(SD.UserId, userResult.Id);
+                        return Redirect("/Admin/Administration/Index");
+                    }
+
+                }
+                HttpContext.Session.SetString(SD.ErrorMessage, string.Empty);
+                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+
             }
 
-            //if(!ModelState.IsValid)
-            //{
-            //    return View("Login", User);
-            //}
+            return RedirectToAction(nameof(Login));
 
-            var isUserValid = await accountService.Login(_db, user);
-
-            HttpContext.Session.SetInt32(SD.UserId, accountService.UserId);
-
-            //return RedirectToAction(nameof(Login));
-
-            if (!isUserValid)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                HttpContext.Session.SetString(SD.ErrorMessage, "Username or Password is Incorrect");
-                return View("Login", user);
-            }
-            HttpContext.Session.SetString(SD.ErrorMessage, string.Empty);
-            return Redirect("/Admin/Administration/Index");
         }
-
-        public  IActionResult LogOut()
+ 
+        public async Task<IActionResult> LogOut()
         {
             HttpContext.Session.Clear();
+            await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Login));
         }
     }

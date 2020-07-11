@@ -8,7 +8,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
 {
     public class FileRecordExportController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }

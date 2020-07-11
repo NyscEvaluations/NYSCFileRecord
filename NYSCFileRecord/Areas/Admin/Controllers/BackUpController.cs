@@ -10,6 +10,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,12 @@ using NYSCFileRecord.Utility;
 namespace NYSCFileRecord.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class BackUpController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         public readonly ApplicationDbContext _db;
-        AccountService accountService = new AccountService();
+        //AccountService accountService = new AccountService();
         public BackUpController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
@@ -39,7 +41,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             var UserId = HttpContext.Session.GetInt32(SD.UserId);
             BackUpViewModel backUpVM = new BackUpViewModel()
             {
-                UserModel = await accountService.GetUser(_db, UserId)
+                //UserModel = await accountService.GetUser(_db, UserId)
             };
             return View(backUpVM);
         }

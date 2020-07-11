@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Data Tables</title>
+    <title>NYSC File Record | File</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="~/plugins/datatables/dataTables.bootstrap.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+
+    <link rel="icon" href="~/Images/images.png" type="image/x-icon" />
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
@@ -37,9 +39,9 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
 
-        <partial name="_Header" model="Model.UserModel" />
+        <partial name="_Header" />
         <!-- Left side column. contains the logo and sidebar -->
-        <partial name="_NavigationalMenu" model="Model.UserModel"/>
+        <partial name="_NavigationalMenu"/>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -47,8 +49,8 @@
             <section class="content-header">
                 <h2 class="text-info">File Record</h2>
                 <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active"><a href="#">File Record</a></li>
+                    <li><a asp-area="Admin" asp-controller="Administration" asp-action="Index"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active"><a asp-area="Admin" asp-controller="File" asp-action="Index">File Record</a></li>
                 </ol>
             </section>
 
@@ -66,7 +68,7 @@
 
                         <div class="box">
                             <div class="box-header">
-                                <h3 class="box-title">Data Table With Full Features</h3>
+                                <h3 class="box-title"></h3>
                             </div><!-- /.box-header -->
                             <div class="box-body">
                                 @if (Model.FileRecord.Count() > 0)
@@ -74,10 +76,10 @@
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Code Number</th>
-                                                <th>Taken To</th>
-                                                <th>Returned From</th>
-                                                <th>Date</th>
+                                                <th>State Code</th>
+                                                <th>Current Location</th>
+                                                <th>Brought From</th>
+                                                <th>Collecting Officer</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -89,13 +91,13 @@
                                                         @Html.DisplayFor(m => item.CodeNumber)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(m => item.TakenTo)
+                                                        @Html.DisplayFor(m => item.CurrentLocation)
                                                     </td>
                                                     <td>
                                                         @Html.DisplayFor(m => item.ReturnedFrom)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(m => item.DateCreated)
+                                                        @Html.DisplayFor(m => item.CollectingOfficer)
                                                     </td>
                                                     <td>
                                                         <div class="btn-group" role="group">
@@ -117,10 +119,10 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Code Number</th>
-                                                <th>Taken To</th>
-                                                <th>Returned From</th>
-                                                <th>Date</th>
+                                                <th>State Code</th>
+                                                <th>Current Location</th>
+                                                <th>Brought From</th>
+                                                <th>Collecting Officer</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>

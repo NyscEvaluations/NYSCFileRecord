@@ -1,23 +1,35 @@
-﻿@model User
+﻿@model LoginModel
 
-@{
-    ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Http;
 @using NYSCFileRecord.Utility;
 
+
+@inject SignInManager<ApplicationUser> signInManager
+@inject UserManager<ApplicationUser> userManager
 @inject IHttpContextAccessor HttpContextAccessor
+
+
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Log in</title>
+    <title>NYSC File Record | Log in</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+
+    <link rel="icon" href="~/Images/images.png" type="image/x-icon" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -34,11 +46,17 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition">
+    <br />
+    <br />
+    <p class="text-center"><img src="~/Images//images.png" class="" alt="User Image" style="height:200px; width:200px;"></p>
+    <p><h2 class="text-center text-success" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">NYSC LAGOS STATE FILE MOVEMENT RECORDS DATABASE</h2></p>
     <div class="login-box">
         <div class="login-logo">
-            <a href="../../index2.html"><b>Admin</b>LTE</a>
+            <a href="../../index2.html"></a>
+
         </div><!-- /.login-logo -->
+
         <div class="login-box-body">
             <p class="login-box-msg">Sign in to start your session</p>
             @if (!string.IsNullOrEmpty(@HttpContextAccessor.HttpContext.Session.GetString(SD.ErrorMessage)))
@@ -51,44 +69,45 @@
             }
 
             @*@if (!ViewData.ModelState.IsValid)
-            {
-                <div class="alert alert-danger alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h4><i class="icon fa fa-ban"></i>Error Alert!</h4>
-                    @Html.ValidationSummary()
-                </div>
-            }*@
-            <form asp-action="Login" method="post">
-                <div class="form-group has-feedback">
-                    <input type="text" class="form-control" placeholder="Email" asp-for="@Model.Username">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <input type="password" class="form-control" placeholder="Password" asp-for="@Model.Password">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                </div>
-                <div class="row">
-                    <div class="col-xs-8">
-                        <div class="checkbox icheck">
-                            <label>
-                                <input type="checkbox"> Remember Me
-                            </label>
-                        </div>
-                    </div><!-- /.col -->
-                    <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-                    </div><!-- /.col -->
-                </div>
-            </form>
+                {
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h4><i class="icon fa fa-ban"></i>Error Alert!</h4>
+                        @Html.ValidationSummary()
+                    </div>
+                }*@
+        <form asp-action="Login" method="post">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Email" asp-for="Email">
+                <span asp-validation-for="Email" class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" placeholder="Password" asp-for="Password">
+                <span asp-validation-for="Password" class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="checkbox icheck">
+                        <label>
+                            <input type="checkbox" asp-for="RememberMe"> Remember Me
+                        </label>
+                    </div>
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                </div><!-- /.col -->
+            </div>
+        </form>
 
-            <div class="social-auth-links text-center">
-                <p>- OR -</p>
-                <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a>
-                <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using Google+</a>
-            </div><!-- /.social-auth-links -->
+            @*<div class="social-auth-links text-center">
+                    <p>- OR -</p>
+                    <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a>
+                    <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using Google+</a>
+                </div> /.social-auth-links*@
 
-            <a href="#">I forgot my password</a><br>
-            <a href="register.html" class="text-center">Register a new membership</a>
+            @*<a href="#">I forgot my password</a><br>
+            <a asp-area="Admin" asp-controller="Account" asp-action="Register" class="text-center">Create New Account</a>*@
 
         </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NYSCFileRecord.Data;
@@ -16,13 +17,19 @@ namespace NYSCFileRecord.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         private readonly FileService fileService;
 
         FileQueries filesValue = new FileQueries();
-        public HomeController(ApplicationDbContext db)
+        public HomeController(ApplicationDbContext db, 
+                              UserManager<ApplicationUser> userManager,
+                              SignInManager<ApplicationUser> signInManager)
         {
             _db = db;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         //FileQueries fileRecord;

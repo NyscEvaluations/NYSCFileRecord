@@ -16,12 +16,12 @@ using NYSCFileRecord.Utility;
 namespace NYSCFileRecord.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class FileController : Controller
     {
         private readonly ApplicationDbContext _db;
 
         FileQueries filesValue = new FileQueries();
-        AccountService accountService = new AccountService();
         FileRecordRepository fileRecordRepository = new FileRecordRepository();
         public FileController(ApplicationDbContext db)
         {
@@ -33,7 +33,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             FileViewModel fileVM = new FileViewModel()
             {
                 FileRecord = await filesValue.GetAllFiles(_db),
-                UserModel = await accountService.GetUser(_db, UserId)
+                //UserModel = await accountService.GetUser(_db, UserId)
             };
             return View(fileVM);
         }
@@ -96,7 +96,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return PartialView(fileRecord);
+            return View(fileRecord);
         }
 
         [HttpGet]
@@ -133,7 +133,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return PartialView(fileRecord);
+            return View(fileRecord);
         }
 
 

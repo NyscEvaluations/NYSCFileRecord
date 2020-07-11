@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model RegisterModel
 
 <div class="box box-info">
     <div class="box-header with-border">
@@ -10,37 +10,36 @@
             <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label">First Name</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputEmail3" placeholder="Name" asp-for="FirstName">
+                    <input type="text" class="form-control" id="inputEmail3" asp-for="FirstName">
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label">Last Name</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputEmail3" placeholder="Name" asp-for="LastName">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label">Username</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputPassword3" placeholder="State Code" asp-for="Username">
+                    <input type="text" class="form-control" id="inputEmail3" asp-for="LastName">
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputPassword3" class="col-sm-2 control-label">Email</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputPassword3" placeholder="Email Address" asp-for="Email">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="Email">
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label">Phone Number</label>
+                <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputPassword3" placeholder="Phone Number" asp-for="PhoneNumber">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="Password">
                 </div>
             </div>
-
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Confirm Password</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="ConfirmPassword">
+                </div>
+            </div>
         </div><!-- /.box-body -->
         <div class="box-footer">
-            <button type="submit" class="btn btn-default">Cancel</button>
+            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-info pull-right">Submit</button>
         </div><!-- /.box-footer -->
     </form>

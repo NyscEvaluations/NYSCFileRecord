@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,12 @@ using NYSCFileRecord.Utility;
 namespace NYSCFileRecord.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ImportExcelToDatabaseController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         public readonly ApplicationDbContext _db;
-        AccountService accountService = new AccountService();
+        //AccountService accountService = new AccountService();
         public ImportExcelToDatabaseController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
@@ -40,7 +42,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             var UserId = HttpContext.Session.GetInt32(SD.UserId);
             ImportExcelToDatabaseViewModel importVM = new ImportExcelToDatabaseViewModel()
             {
-                UserModel = await accountService.GetUser(_db, UserId)
+                //UserModel = await accountService.GetUser(_db, UserId)
             };
             return View(importVM);
         }
@@ -89,6 +91,13 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
                             CodeNumber = row.GetCell(1).ToString(),
                             Name = row.GetCell(2).ToString(),
                             Description = row.GetCell(3).ToString(),
+                            PhoneNumber = row.GetCell(4).ToString(),
+                            TakenTo = row.GetCell(5).ToString(),
+                            ReturnedFrom = row.GetCell(6).ToString(),
+                            shelfNumber = row.GetCell(7).ToString(),
+                            CurrentLocation = row.GetCell(8).ToString(),
+                            CollectingOfficer = row.GetCell(9).ToString(),
+                            RecordingOfficer = row.GetCell(10).ToString(),
                             IsActive = true,
                             DateCreated = DateTime.UtcNow
                         };

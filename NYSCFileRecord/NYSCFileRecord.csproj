@@ -5,6 +5,17 @@
     <UserSecretsId>aspnet-NYSCFileRecord-ED6DC05F-0ABE-4618-BE6F-E04BF487AAC1</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200615201621_Extend_IdentityUser.cs" />
+    <Compile Remove="Data\Migrations\20200615201621_Extend_IdentityUser.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200620114242_userapplication1.cs" />
+    <Compile Remove="Data\Migrations\20200620114242_userapplication1.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200621004958_applicationuserextendsidentityuser.cs" />
+    <Compile Remove="Data\Migrations\20200621004958_applicationuserextendsidentityuser.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200621010218_applicationuserextendsidentityuser.cs" />
+    <Compile Remove="Data\Migrations\20200621010218_applicationuserextendsidentityuser.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.46.0.1964" />

@@ -1,83 +1,83 @@
-﻿using NPOI.POIFS.Crypt;
-using NYSCFileRecord.Data;
-using NYSCFileRecord.Models;
-using NYSCFileRecord.Repositories.Queries;
-using Org.BouncyCastle.Crypto.Generators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//using NPOI.POIFS.Crypt;
+//using NYSCFileRecord.Data;
+//using NYSCFileRecord.Models;
+//using NYSCFileRecord.Repositories.Queries;
+//using Org.BouncyCastle.Crypto.Generators;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
 
-namespace NYSCFileRecord.Repositories.Services
-{
-    public class AccountRepository
-    {
-        private int UserId;
-        Encryptor encrypte;
-        SCrypt crpyt = new SCrypt();
+//namespace NYSCFileRecord.Repositories.Services
+//{
+//    public class AccountRepository
+//    {
+//        private int UserId;
+//        Encryptor encrypte;
+//        SCrypt crpyt = new SCrypt();
 
-        public async Task<string> SaveUserInfo(ApplicationDbContext _db, User user)
-        {
-            var result = string.Empty;
+//        public async Task<string> SaveUserInfo(ApplicationDbContext _db, User user)
+//        {
+//            var result = string.Empty;
 
-            var userInfo = new User
-            {
-                UserId = user.UserId,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Password = user.Password,
-                PhoneNumber = user.PhoneNumber,
-                StreetAddress = user.StreetAddress,
-                City = user.City,
-                State = user.State,
-                IsActive = true,
-                DateCreated = DateTime.UtcNow
-            };
+//            var userInfo = new User
+//            {
+//                UserId = user.UserId,
+//                Username = user.Username,
+//                FirstName = user.FirstName,
+//                LastName = user.LastName,
+//                Email = user.Email,
+//                Password = user.Password,
+//                PhoneNumber = user.PhoneNumber,
+//                StreetAddress = user.StreetAddress,
+//                City = user.City,
+//                State = user.State,
+//                IsActive = true,
+//                DateCreated = DateTime.UtcNow
+//            };
 
-            try
-            {
-                _db.User.Add(userInfo);
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
+//            try
+//            {
+//                _db.User.Add(userInfo);
+//                await _db.SaveChangesAsync();
+//            }
+//            catch (Exception e)
+//            {
 
-                result = e.Message;
-            }
-            UserId = userInfo.UserId;
-            return result;
-        }
+//                result = e.Message;
+//            }
+//            //UserId = userInfo.UserId;
+//            return result;
+//        }
 
-        public async Task<string> UpdateUserInfo(ApplicationDbContext _db, User user)
-        {
-            var result = string.Empty;
+//        public async Task<string> UpdateUserInfo(ApplicationDbContext _db, User user)
+//        {
+//            var result = string.Empty;
 
 
-            try
-            {
-                var UserInfo = _db.User.SingleOrDefault(u => u.UserId == user.UserId);
+//            try
+//            {
+//                var UserInfo = _db.User.SingleOrDefault(u => u.UserId == user.UserId);
 
-                UserInfo.FirstName = user.FirstName;
-                UserInfo.LastName = user.LastName;
-                UserInfo.Email = user.Email;
-                UserInfo.PhoneNumber = user.PhoneNumber;
-                UserInfo.StreetAddress = user.StreetAddress;
-                UserInfo.City = user.City;
-                UserInfo.State = user.State;
-                UserInfo.PostalCode = user.PostalCode;
-                UserInfo.Picture = user.Picture;
+//                UserInfo.FirstName = user.FirstName;
+//                UserInfo.LastName = user.LastName;
+//                UserInfo.Email = user.Email;
+//                UserInfo.PhoneNumber = user.PhoneNumber;
+//                UserInfo.StreetAddress = user.StreetAddress;
+//                UserInfo.City = user.City;
+//                UserInfo.State = user.State;
+//                UserInfo.PostalCode = user.PostalCode;
+//                UserInfo.Picture = user.Picture;
 
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
+//                await _db.SaveChangesAsync();
+//            }
+//            catch (Exception e)
+//            {
 
-                result = e.Message;
-            }
+//                result = e.Message;
+//            }
 
-            return result;
-        }
-    }
-}
+//            return result;
+//        }
+//    }
+//}

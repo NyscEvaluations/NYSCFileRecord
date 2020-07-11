@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Data Tables</title>
+    <title>NYSC File Record | Import File</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="~/plugins/datatables/dataTables.bootstrap.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+
+    <link rel="icon" href="~/Images/images.png" type="image/x-icon" />
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
@@ -37,18 +39,18 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
 
-        <partial name="_Header" model="Model.UserModel"/>
+        <partial name="_Header"/>
         <!-- Left side column. contains the logo and sidebar -->
-        <partial name="_NavigationalMenu" model="Model.UserModel"/>
+        <partial name="_NavigationalMenu"/>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
-                <h2 class="text-info">File Record</h2>
+                <h2 class="text-info">Import File from Excel to Database</h2>
                 <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active"><a href="#">File Record</a></li>
+                    <li><a asp-area="Admin" asp-controller="Administration" asp-action="Index"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active"><a asp-area="Admin" asp-controller="ImportExcelToDatabase" asp-action="Import">Import Excel File</a></li>
                 </ol>
             </section>
 
@@ -72,9 +74,10 @@
                         </div>
                     </div>
                 </form>
-
-                <a asp-area="Admin" asp-controller="ImportExcelToDatabase" asp-action="ImportPOST">Import</a>
-
+            <br />
+            <p><h3 class="text-center">Use the format of the Excel sheet below</h3></p>
+                <br />
+                <p ><img src="~/Images/Excel_format.png" class="" alt="User Image" style="height:500px; width:1800px;"></p>
             </section><!-- /.content -->
         </div><!-- /.content-wrapper -->
         <partial name="_Footer" />

@@ -2,27 +2,29 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NYSCFileRecord.Models;
 
 namespace NYSCFileRecord.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-        {
-        }
-
+       
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-
+        
         public DbSet<FileRecord> FileRecord { get; set; }
-        public DbSet<CDSRecord> CDSRecord { get; set; }
-        public DbSet<User> User { get; set; }
-        public DbSet<AppRole> AppRole { get; set; }
-        public DbSet<UserAppRole> UserAppRole { get; set; }
+       
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            // Customize the ASP.NET Identity model and override the defaults if needed.
+            // For example, you can rename the ASP.NET Identity table names and more.
+            // Add your customizations after calling base.OnModelCreating(builder);
+        }
     }
 }

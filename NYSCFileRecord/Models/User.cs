@@ -9,13 +9,15 @@ namespace NYSCFileRecord.Models
     public class User
     {
         [Key]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         [Required]
         public string Username { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        public string Position { get; set; }
+        public string Level { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -32,6 +34,10 @@ namespace NYSCFileRecord.Models
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
+        public string Course { get; set; }
+        public string Qualification { get; set; }
+        public string Institution { get; set; }
+        public string Biography { get; set; }
         public bool IsActive { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateVerified { get; set; }

@@ -23,8 +23,15 @@ namespace NYSCFileRecord.Repositories.Queries
                                     Name = f.Name,
                                     CodeNumber = f.CodeNumber,
                                     Description = f.Description,
-                                    PhoneNumber = f.PhoneNumber
-                                }).ToListAsync();
+                                    PhoneNumber = f.PhoneNumber,
+                                    TakenTo = f.TakenTo,
+                                    ReturnedFrom = f.ReturnedFrom,
+                                    shelfNumber = f.shelfNumber,
+                                    CurrentLocation = f.CurrentLocation,
+                                    CollectingOfficer = f.CollectingOfficer,
+                                    RecordingOfficer = f.RecordingOfficer,
+                                    DateReturned = f.DateReturned
+                                }).OrderBy(f => f.DateReturned).ToListAsync();
 
             return result;
         }
@@ -41,7 +48,14 @@ namespace NYSCFileRecord.Repositories.Queries
                                     Name = f.Name,
                                     CodeNumber = f.CodeNumber,
                                     Description = f.Description,
-                                    PhoneNumber = f.PhoneNumber
+                                    PhoneNumber = f.PhoneNumber,
+                                    TakenTo = f.TakenTo,
+                                    ReturnedFrom = f.ReturnedFrom,
+                                    shelfNumber = f.shelfNumber,
+                                    CurrentLocation = f.CurrentLocation,
+                                    CollectingOfficer = f.CollectingOfficer,
+                                    RecordingOfficer = f.RecordingOfficer,
+                                    DateReturned = f.DateReturned
                                 }).ToListAsync();
 
             return result;
@@ -72,7 +86,14 @@ namespace NYSCFileRecord.Repositories.Queries
                                       Name = f.Name,
                                       CodeNumber = f.CodeNumber,
                                       Description = f.Description,
-                                      PhoneNumber = f.PhoneNumber
+                                      PhoneNumber = f.PhoneNumber,
+                                      TakenTo = f.TakenTo,
+                                      ReturnedFrom = f.ReturnedFrom,
+                                      shelfNumber = f.shelfNumber,
+                                      CurrentLocation = f.CurrentLocation,
+                                      CollectingOfficer = f.CollectingOfficer,
+                                      RecordingOfficer = f.RecordingOfficer,
+                                      DateReturned = f.DateReturned
                                   }).Where(f => f.Id == fileId).FirstOrDefaultAsync();
             return result;     
          }

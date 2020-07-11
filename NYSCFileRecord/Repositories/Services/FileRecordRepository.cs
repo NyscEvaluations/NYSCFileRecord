@@ -20,6 +20,13 @@ namespace NYSCFileRecord.Repositories.Services
                 Name = fileRecord.Name,
                 Description = fileRecord.Description,
                 PhoneNumber = fileRecord.PhoneNumber,
+                TakenTo = fileRecord.TakenTo,
+                ReturnedFrom = fileRecord.ReturnedFrom,
+                shelfNumber = fileRecord.shelfNumber,
+                CurrentLocation = fileRecord.TakenTo,
+                CollectingOfficer = fileRecord.CollectingOfficer,
+                RecordingOfficer = fileRecord.RecordingOfficer,
+                DateReturned = DateTime.UtcNow,
                 IsActive = true,
                 DateCreated = DateTime.UtcNow
             };
@@ -50,7 +57,14 @@ namespace NYSCFileRecord.Repositories.Services
                 fileRecordInfo.CodeNumber = fileRecord.CodeNumber;
                 fileRecordInfo.Name = fileRecord.Name;
                 fileRecordInfo.Description = fileRecord.Description;
-                fileRecordInfo.PhoneNumber = fileRecordInfo.PhoneNumber;
+                fileRecordInfo.PhoneNumber = fileRecord.PhoneNumber;
+                fileRecordInfo.TakenTo = fileRecord.TakenTo;
+                fileRecordInfo.ReturnedFrom = fileRecord.ReturnedFrom;
+                fileRecordInfo.shelfNumber = fileRecord.shelfNumber;
+                fileRecordInfo.CurrentLocation = fileRecord.CurrentLocation;
+                fileRecordInfo.CollectingOfficer = fileRecord.CollectingOfficer;
+                fileRecordInfo.RecordingOfficer = fileRecord.RecordingOfficer;
+                fileRecordInfo.DateReturned = fileRecord.DateReturned;
 
                 await _db.SaveChangesAsync();
             }

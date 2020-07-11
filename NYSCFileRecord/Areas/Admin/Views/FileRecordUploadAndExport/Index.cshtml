@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Data Tables</title>
+    <title>NYSC File Record | Data Tables</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- DataTables -->
     <link rel="stylesheet" href="~/plugins/datatables/dataTables.bootstrap.css">
+
+    <link rel="icon" href="~/Images/images.png" type="image/x-icon" />
     <!-- Theme style -->
     <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -47,8 +49,8 @@
             <section class="content-header">
                 <h2 class="text-info">File Record</h2>
                 <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active"><a href="#">File Record</a></li>
+                    <li><a asp-area="Admin" asp-controller="Administration" asp-action="Index"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active"><a asp-area="Admin" asp-controller="FileRecordUploadAndExport" asp-action="Index">File Record</a></li>
                 </ol>
             </section>
 

@@ -6,36 +6,78 @@
     </div><!-- /.box-header -->
     <!-- form start -->
     <form class="form-horizontal" method="post" asp-action="Delete">
-        <input type="hidden" class="form-control" id="inputEmail3" placeholder="Name" asp-for="Id">
+        <input type="hidden" class="form-control" id="inputEmail3" asp-for="Id">
         <div class="box-body">
             <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+                <label for="inputEmail3" class="col-sm-2 control-label">Officer's Name</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputEmail3" placeholder="Name" asp-for="Name" readonly>
+                    <input type="text" class="form-control" id="inputEmail3" asp-for="Name" readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputPassword3" class="col-sm-2 control-label">State Code</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputPassword3" placeholder="State Code" asp-for="CodeNumber" readonly>
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="CodeNumber" readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputPassword3" class="col-sm-2 control-label">Description</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputPassword3" placeholder="Email Address" asp-for="Description" readonly>
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="Description" readonly>
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label">Phone Number</label>
+                <label for="inputPassword3" class="col-sm-2 control-label">Officer's Phone</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputPassword3" placeholder="Phone Number" asp-for="PhoneNumber" readonly>
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="PhoneNumber" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Taken To</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="TakenTo" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Brought From</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="ReturnedFrom" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">shelf Number</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="shelfNumber" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Current Location</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="CurrentLocation" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Collecting Officer</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="CollectingOfficer" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Recording Officer</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="RecordingOfficer" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Date Returned</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword3" asp-for="DateReturned">
                 </div>
             </div>
 
         </div><!-- /.box-body -->
         <div class="box-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-success pull-right">Delete</button>
         </div><!-- /.box-footer -->
     </form>

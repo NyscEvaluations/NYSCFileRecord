@@ -12,6 +12,7 @@ using NYSCFileRecord.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NYSCFileRecord.Models;
 
 namespace NYSCFileRecord
 {
@@ -30,8 +31,19 @@ namespace NYSCFileRecord
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+
+            });
+
+            services.ConfigureApplicationCookie(options =>
+                                                {
+                                                    options.LoginPath = "/Admin/Account/Login";
+                                                    options.AccessDeniedPath = "/Admin/Administration/AccessDenied";
+                                                });
 
             services.AddDistributedMemoryCache();
 
@@ -41,6 +53,13 @@ namespace NYSCFileRecord
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
             });
+
+            services.AddAuthentication()
+                    .AddCookie(options =>
+                    {
+                        options.LoginPath = "/Admin/Account/Login";
+                        options.LogoutPath = "/Admin/Account/Login";
+                    });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -73,7 +92,7 @@ namespace NYSCFileRecord
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Corper}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Admin}/{controller=Account}/{action=Login}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

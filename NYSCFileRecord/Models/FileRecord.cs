@@ -10,25 +10,18 @@ namespace NYSCFileRecord.Models
     {
         [Key]
         public int Id { get; set; }
-
         public string CodeNumber { get; set; }
-
         public string Name { get; set; }
-
         public string Description { get; set; }
-
         public string PhoneNumber { get; set; }
-
         public string TakenTo { get; set; }
-
         public string ReturnedFrom { get; set; }
-
+        public string shelfNumber { get; set; }
+        public string CurrentLocation { get; set; }
         public string CollectingOfficer { get; set; }
-
         public string RecordingOfficer { get; set; }
-
         public bool IsActive { get; set; }
-
+        public DateTime DateReturned { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

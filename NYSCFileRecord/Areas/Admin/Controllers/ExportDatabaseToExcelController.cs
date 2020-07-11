@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,12 @@ using NYSCFileRecord.Utility;
 namespace NYSCFileRecord.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ExportDatabaseToExcelController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         public readonly ApplicationDbContext _db;
-        AccountService accountService = new AccountService();
+        //AccountService accountService = new AccountService();
         public ExportDatabaseToExcelController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
@@ -37,7 +39,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             var UserId = HttpContext.Session.GetInt32(SD.UserId);
             ExportDatabaseToExcelViewModel exportVM = new ExportDatabaseToExcelViewModel()
             {
-                UserModel = await accountService.GetUser(_db, UserId)
+                //UserModel = await accountService.GetUser(_db, UserId)
             };
             return View(exportVM);
         }
@@ -59,7 +61,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             {
                 IWorkbook workbook;
                 workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("employee");
+                ISheet excelSheet = workbook.CreateSheet("File Record");
                 IRow row = excelSheet.CreateRow(0);
 
 
@@ -68,7 +70,14 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
                 row.CreateCell(1).SetCellValue("Code Number");
                 row.CreateCell(2).SetCellValue("Name");
                 row.CreateCell(3).SetCellValue("Description");
-                row.CreateCell(4).SetCellValue("Date");
+                row.CreateCell(4).SetCellValue("Phone Number");
+                row.CreateCell(5).SetCellValue("Taken To");
+                row.CreateCell(6).SetCellValue("Returned From");
+                row.CreateCell(7).SetCellValue("shelf Number");
+                row.CreateCell(8).SetCellValue("Current Location");
+                row.CreateCell(9).SetCellValue("Collecting Officer");
+                row.CreateCell(10).SetCellValue("Recording Officer");
+                row.CreateCell(11).SetCellValue("Date");
 
                 int count = 1;
                 foreach (var item in fileRecord)
@@ -78,7 +87,14 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
                     row.CreateCell(1).SetCellValue(item.CodeNumber);
                     row.CreateCell(2).SetCellValue(item.Name);
                     row.CreateCell(3).SetCellValue(item.Description);
-                    row.CreateCell(4).SetCellValue(item.DateCreated);
+                    row.CreateCell(4).SetCellValue(item.PhoneNumber);
+                    row.CreateCell(5).SetCellValue(item.TakenTo);
+                    row.CreateCell(6).SetCellValue(item.ReturnedFrom);
+                    row.CreateCell(7).SetCellValue(item.shelfNumber);
+                    row.CreateCell(8).SetCellValue(item.CurrentLocation);
+                    row.CreateCell(9).SetCellValue(item.CollectingOfficer);
+                    row.CreateCell(10).SetCellValue(item.RecordingOfficer);
+                    row.CreateCell(11).SetCellValue(item.DateCreated);
                     count++;
                 }
 
