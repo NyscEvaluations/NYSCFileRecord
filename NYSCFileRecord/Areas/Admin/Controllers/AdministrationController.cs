@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace NYSCFileRecord.Areas.Admin.Controllers
 {
@@ -26,15 +28,19 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<AdministrationController> logger;
+
         public AdministrationController(ApplicationDbContext db,
                                         RoleManager<IdentityRole> roleManager,
                                         UserManager<ApplicationUser> userManager,
-                                        SignInManager<ApplicationUser> signInManager)
+                                        SignInManager<ApplicationUser> signInManager,
+                                        ILogger<AdministrationController> logger)
         {
             _db = db;
             _roleManager = roleManager;
             _userManager = userManager;
             _signInManager = signInManager;
+            this.logger = logger;
         }
 
         FileQueries filesValue = new FileQueries();
@@ -490,6 +496,102 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var model = new EditRoleViewModel()
+            {
+                Id = role.Id,
+                RoleName = role.Name
+            };
+
+            foreach (var user in _userManager.Users)
+            {
+                if (await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    model.Users.Add(user.UserName);
+                };
+            }
+
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteRole(EditRoleViewModel model)
+        {
+            var role = await _roleManager.FindByIdAsync(model.Id);
+
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {model.Id} cannot be found";
+                return Redirect("/Admin/Administration/ErrorOccured");
+            }
+            else
+            {
+                try
+                {
+                    var result = await _roleManager.DeleteAsync(role);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(RolesList));
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(model);
+                }
+                catch(DbUpdateException ex)
+                {
+                    logger.LogError($"Error deleting role {ex}");
+                    ViewBag.ErrorTitle = $"{role.Name} role is in use";
+                    ViewBag.ErrorMessage = $"{role.Name} role cannot be deleted as there are users in this role. " +
+                        $"If you want to delete this role, please remove the users from the role and then delete";
+                    return View("ErrorOccured");
+                }
+               
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RoleDetail(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var model = new EditRoleViewModel()
+            {
+                Id = role.Id,
+                RoleName = role.Name
+            };
+
+            foreach (var user in _userManager.Users)
+            {
+                if (await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    model.Users.Add(user.UserName);
+                };
+            }
+
+            return PartialView(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditUsersInRole(string roleId)
         {
             ViewBag.roleId = roleId;
@@ -571,6 +673,13 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
         [HttpGet]
         [AllowAnonymous]
         public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ErrorOccured()
         {
             return View();
         }

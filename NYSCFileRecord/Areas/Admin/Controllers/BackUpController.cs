@@ -46,6 +46,13 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             return View(backUpVM);
         }
 
+        [HttpPost]
+        public IActionResult OneDrive()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public IActionResult BackUpService()
         {
 

@@ -102,11 +102,11 @@
                                                         <i class="fa fa-edit"></i>
                                                     </a>
 
-                                                    <a class="btn btn-success text-white" asp-action="Detail" asp-route-Id="@role.Id">
+                                                    <a class="btn btn-success text-white" onclick="editModal('/Admin/Administration/RoleDetail?Id=@role.Id')">
                                                         <i class="fa fa-list-alt"></i>
                                                     </a>
 
-                                                    <a class="btn btn-danger text-white" asp-action="Delete" asp-route-Id="@role.Id">
+                                                    <a class="btn btn-danger text-white" onclick="editModal('/Admin/Administration/DeleteRole?Id=@role.Id')">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                     </div>

@@ -1,0 +1,49 @@
+﻿@model NYSCFileRecord.Models.ViewModels.EditRoleViewModel
+
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Delete User Record</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    <form class="form-horizontal" method="post" asp-action="DeleteRole">
+        <input type="hidden" class="form-control" id="inputEmail3" asp-for="Id" readonly>
+        <div class="box-body">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Id</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail3" asp-for="Id" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Role Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail3" asp-for="RoleName" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">User Role</label>
+                <div class="col-sm-10">
+                    @if (Model.Users.Any())
+                    {
+                        foreach (var user in Model.Users)
+                        {
+                            <p>@user</p>
+                        }
+                    }
+                    else
+                    {
+                        <p>No role is assigned</p>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+        <div class="box-footer">
+            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success pull-right">Delete</button>
+        </div><!-- /.box-footer -->
+    </form>
+</div><!-- /.box -->
