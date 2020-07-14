@@ -4,6 +4,7 @@
 @inject RoleManager<IdentityRole> roleManager
 
 @{
+    var roleName = "";
     var user = await userManager.GetUserAsync(User);
     var roles = await userManager.GetRolesAsync(user);
 
@@ -62,15 +63,15 @@
                                 <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                             }
 
-                            <p>
+                        <p>
+                            @foreach (var role in roles)
+                            {
+                                roleName = role.ToString();
+                            }
+                            @user.FirstName @user.LastName - @roleName
 
-                                @user.FirstName @user.LastName - 
-                                @foreach (var role in roles)
-                                {
-                                    role.ToString();
-                                }
-                                <small>Member since Nov. 2012</small>
-                            </p>
+                            <small>Registered since @user.DateCreated.ToString("MMMM dd")</small>
+                        </p>
                         </li>
                         <!-- Menu Body -->
                         

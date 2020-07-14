@@ -190,7 +190,8 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Email = model.Email,
-                    IsActive = true
+                    IsActive = true,
+                    DateCreated = DateTime.UtcNow
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

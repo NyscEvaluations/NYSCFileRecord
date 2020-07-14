@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Dropbox.Api;
+using Dropbox.Api.Files;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
@@ -28,6 +30,7 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class BackUpController : Controller
     {
+        private static string token = "noBqWNfrhOAAAAAAAAAAIX93YUO_lQ4JEE6VebzpYJUU0Pzbg7nUe6sRWrgbDN_C";
         private readonly IWebHostEnvironment _webHostEnvironment;
         public readonly ApplicationDbContext _db;
         //AccountService accountService = new AccountService();
@@ -52,17 +55,92 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DropBox_Rerieve_USerInfo()
+        {
+            using (var dbx = new DropboxClient(token))
+            {
+                var id = await dbx.Users.GetCurrentAccountAsync();
+                return View(id);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DropBox_Download_File()
+        {
+            
+
+            using (var dbx = new DropboxClient(token))
+            {
+                string folder = "";
+                string file = "";
+
+                using (var response = await dbx.Files.DownloadAsync(folder + "/" + file))
+                {
+                    var s = response.GetContentAsByteArrayAsync();
+                    s.Wait();
+                    var d = s.Result;
+                    System.IO.File.WriteAllBytes(file, d);
+                    return View(d);
+                }
+            }
+        }
+
         [HttpPost]
+        public async Task<IActionResult> DropBox_Upload_File()
+        {
+
+            string url = "";
+
+            var files = HttpContext.Request.Form.Files;
+            string folderName = "UploadDatabase";
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            string newPath = Path.Combine(webRootPath, folderName);
+
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+            string filename = files[0].FileName;
+
+            string fullPath = Path.Combine(newPath, filename);
+
+            var dbx = new DropboxClient(token);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+
+                byte[] content;
+                using (var reader = new BinaryReader(fileStream))
+                {
+                    content = reader.ReadBytes((int)fileStream.Length);
+                }
+
+                using (var mem = new MemoryStream(content))
+                {
+                    await dbx.Files.UploadAsync("/" + folderName + "/" + filename, WriteMode.Overwrite.Instance, body:
+                          mem);
+                    var tx = dbx.Sharing.CreateSharedLinkWithSettingsAsync("/" + folderName + "/" + filename);
+                    tx.Wait();
+                    url = tx.Result.Url;
+                   
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+       
         public IActionResult BackUpService()
         {
 
             var trustedFileNameForFileStorage = Path.GetRandomFileName();
-            //BackupAllUserDatabases();
-
 
             var backUp = ScriptDatabase();
 
-            UplaodFileOnDrive(backUp);
+            //UplaodFileOnDrive(backUp);
 
             var databasename = _db.Database.GetDbConnection().Database;
 
@@ -71,7 +149,6 @@ namespace NYSCFileRecord.Areas.Admin.Controllers
             using (StreamWriter sw = System.IO.File.CreateText(filePath))
             {
                 sw.Write(backUp);
-
 
             }
 
